@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://logos-world.net/wp-content/uploads/2020/09/Spotify-Emblem.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" >
+
+    <title>Spotify</title>
+    <style>
+        /* Music player styles */
+        .music-player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            background-color: #181818;
+            border-top: 1px solid #282828;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 100;
+        }
+
+        .now-playing {
+            display: flex;
+            align-items: center;
+            width: 30%;
+        }
+
+        .now-playing img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            margin-right: 14px;
+        }
+
+        .song-info h4 {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-info p {
+            color: #b3b3b3;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .player-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40%;
+        }
+
+        .control-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .control-button {
+            background: none;
+            border: none;
+            color: #b3b3b3;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 0 8px;
+        }
+
+        .control-button:hover {
+            color: #fff;
+        }
+
+        .control-button.play-pause {
+            color: #fff;
+            background-color: #fff;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-button.play-pause span {
+            color: #000;
+        }
+
+        .progress-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-time {
+            color: #b3b3b3;
+            font-size: 11px;
+            min-width: 40px;
+            text-align: center;
+        }
+      
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 4px;
+            background-color: #535353;
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #b3b3b3;
+            border-radius: 2px;
+            width: 0%;
+        }
+
+        .progress-bar:hover .progress {
+            background-color: #1db954;
+        }
+
+        .player-options {
+            width: 30%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            width: 125px;
+        }
+
+        .volume-button {
+            background: none;
+            border: none;
+            color: #b3b3b3;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 80px;
+            height: 4px;
+            background: #535353;
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        /* Adjust the preview banner to make room for player */
+        .preview {
+            bottom: 90px;
+        }
+
+        /* Hide the existing song-list since we'll use the music player instead */
+        .song-list {
+            display: none;
+        }
+
+        /* Add cursor pointer to the playlist items */
+        .spotify-playlists .list .item {
+            cursor: pointer;
+        }
+     
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+      <div class="logo">
+        <a href="#">
+          <img src="/photos s\logoo project.png" alt="Logo" />
+        </a>
+      </div>
+
+      <div class="navigation">
+        <ul>
+          <li>
+            <a href="#">
+              <span class="fa fa-house"></i></span>
+              <span>Home</span>
+              </a>
+          </li> 
+
+          <li>
+          
+            <a href="#">
+              <span class="fa fa-search"></span>
+                <span>Search</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#">
+              <span class="fa fas fa-book"></span>
+              <span>Your Library</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="navigation">
+        <ul>
+          <li>
+            <a href="#">
+              <span class="fa fas fa-plus-square"></span>
+              <span>Create Playlist</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#">
+              <span class="fa fas fa-heart"></span>
+              <span>Liked Songs</span>
+            </a>
+          </li>
+       
+
+        <li>
+          <a href="moodboard.html">
+            <span class="fa fas fa-headphones"></span>
+            <span>Moodboard</span>
+            </a>
+        </li>
+      </ul>
+
+      </div>
+
+      <div class="policies">
+        <ul>
+          <li>
+            <a href="#">Cookies</a>
+          </li>
+          <li>
+            <a href="#">Privacy</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-container">
+      <div class="topbar">
+        <div class="prev-next-buttons">
+          <button type="button" class="fa fas fa-chevron-left"></button>
+          <button type="button" class="fa fas fa-chevron-right"></button>
+          </div>
+          
+        <div class="navbar">
+          <ul>
+          <li>
+            <button id="modeToggle">🌓</button>
+           </li>  
+            <li>
+              <a href="#">Premium</a>
+            </li>
+           <li>
+              <a href="#">Support</a>
+            </li>
+            <li>
+              <a href="#">Download</a>
+            </li>
+            <li class="divider">|</li>
+            <i class="fa-solid fa-heart"></i>
+          
+          </ul>
+        
+       
+        </div>
+      </div>
+
+      <div class="spotify-playlists">
+        <h2>Your Songs</h2>
+        <div class="list">
+          <div class="item" data-song="song1">
+            <img src="https://upload.wikimedia.org/wikipedia/en/e/e6/The_Weeknd_-_Blinding_Lights.png" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Blinding Lights</h4>
+            <p>The Weeknd</p>
+          </div>
+      
+          <div class="item" data-song="song11">
+            <img src="https://i.scdn.co/image/ab67616d0000b273fd2df008046f04c32d9c0c2e" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>O Rangrez</h4>
+            <p>Shankar-Eshan-Loy</p>
+          </div>
+      
+          <div class="item" data-song="song15">
+            <img src="/photos s\Screenshot 2025-04-30 105155.png" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Softly</h4>
+            <p>Karan Aujla</p>
+          </div>
+      
+          <div class="item" data-song="song14">
+            <img src="/photos s/Screenshot 2025-04-29 214020.png" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Maahi ve</h4>
+            <p>A.R Rahman</p>
+          </div>
+      
+          <div class="item" data-song="song5">
+            <img src="/photos s/Screenshot 2025-03-30 121919.png" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Good 4 you</h4>
+            <p>Olivia Rodrigo</p>
+          </div>
+      
+          <div class="item" data-song="song11">
+            <img src="https://i.scdn.co/image/ab67616d0000b273fd2df008046f04c32d9c0c2e" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>O rangrez</h4>
+            <p>Shankar-Eshan-Loy</p>
+          </div>
+      
+          <div class="item" data-song="song2">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS66anQAPLTqT5msqmA3bUgP8nU6L34JTvL1A&s" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Levitating</h4>
+            <p>Dua Lipa</p>
+          </div>
+      
+          <div class="item" data-song="song12">
+            <img src="https://c.saavncdn.com/367/Ve-Haaniyaan-Punjabi-2024-20240212220137-500x500.jpg" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Ve haniya</h4>
+            <p>Danny, Avvy Sra, Sagar</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="spotify-playlists">
+        <h2>Recommended Songs</h2>
+        <div class="list">
+          <div class="item" data-song="song13">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLd9AW_MGHpVf0TbpiSh3bvu7Rq_c7T4Aopw&s" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Slow Motion Angreja</h4>
+            <p>Shankar-Eshan-Loy</p>
+          </div>
+      
+          <div class="item" data-song="song5">
+            <img src="/photos s/Screenshot 2025-03-30 121919.png" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Good 4 you</h4>
+            <p>Olivia Rodrigo</p>
+          </div>
+      
+          <div class="item" data-song="song7">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT583ahTSIDons2ZfP1cxtHw9WN4C-0V-P6gw&s" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Patakha Guddi</h4>
+            <p>Jyoti Nooran</p>
+          </div>
+      
+          <div class="item" data-song="song9">
+            <img src="https://c.saavncdn.com/525/Chennai-Express-2013-500x500.jpg" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Titli</h4>
+            <p>Vishal-Shekhar</p>
+          </div>
+      
+          <div class="item" data-song="song8">
+            <img src="https://img.youtube.com/vi/jXlNjZnnCgc/mqdefault.jpg" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>O Boy Charlie</h4>
+            <p>Vishal Bhardwaj</p>
+          </div>
+      
+          <div class="item" data-song="song6">
+            <img src="https://c.saavncdn.com/143/Sukoon-Mila-Lo-Fi-Mix-Hindi-2023-20230606230325-500x500.jpg" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Sukoon Mila</h4>
+            <p>Arijit Singh</p>
+          </div>
+      
+          <div class="item" data-song="song11">
+            <img src="https://i.scdn.co/image/ab67616d0000b273fd2df008046f04c32d9c0c2e" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>O Rangrez</h4>
+            <p>Shankar-Eshan-Loy</p>
+          </div>
+      
+          <div class="item" data-song="song7">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT583ahTSIDons2ZfP1cxtHw9WN4C-0V-P6gw&s" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Patakha Guddi</h4>
+            <p>Jyoti Nooran</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="spotify-playlists">
+        <h2>Listen Again</h2>
+        <div class="list">
+          <div class="item" data-song="song2">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS66anQAPLTqT5msqmA3bUgP8nU6L34JTvL1A&s" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Levitating</h4>
+            <p>Dua Lipa</p>
+          </div>
+      
+          <div class="item" data-song="song13">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLd9AW_MGHpVf0TbpiSh3bvu7Rq_c7T4Aopw&s" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Slow Motion Angreza</h4>
+            <p>Shankar-Eshan-Loy</p>
+          </div>
+      
+          <div class="item" data-song="song14">
+            <img src="/photos s/Screenshot 2025-04-29 214020.png" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Maahi Ve</h4>
+            <p>A.R Rahman</p>
+          </div>
+      
+          <div class="item" data-song="song5">
+            <img src="/photos s/Screenshot 2025-03-30 121919.png" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Good 4 you</h4>
+            <p>Olivia Rodrigo</p>
+          </div>
+      
+          <div class="item" data-song="song8">
+            <img src="https://img.youtube.com/vi/jXlNjZnnCgc/mqdefault.jpg" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>O Boy Charlie</h4>
+            <p>Vishal Bhardwaj</p>
+          </div>
+      
+          <div class="item" data-song="song2">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS66anQAPLTqT5msqmA3bUgP8nU6L34JTvL1A&s" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Levitating</h4>
+            <p>Dua Lipa</p>
+          </div>
+      
+          <div class="item" data-song="song7">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT583ahTSIDons2ZfP1cxtHw9WN4C-0V-P6gw&s" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Patakha Guddi</h4>
+            <p>Jyoti Nooran</p>
+          </div>
+      
+          <div class="item" data-song="song6">
+            <img src="https://c.saavncdn.com/143/Sukoon-Mila-Lo-Fi-Mix-Hindi-2023-20230606230325-500x500.jpg" />
+            <div class="play">
+              <span class="fa fa-play"></span>
+            </div>
+            <h4>Sukoon Mila</h4>
+            <p>Arijit Singh</p>
+          </div>
+        </div>
+      </div>
+      
+      
+    
+
+    <!-- Audio elements for songs -->
+    <audio id="song1" src="/music/Ogi_Feel_the_Beat_-_Tristeza.mp3"></audio>
+    <audio id="song2" src="/music\No_Rest_Or_Endless_Rest_-_Lisofv.mp3"></audio>
+    <audio id="song3" src="/music\Color_Out_-_Host.mp3"></audio>
+    <audio id="song4" src="/music\Pokki_DJ_-_Burn_Together.mp3"></audio>
+    <audio id="song5" src="/music\Sayok_-_Echoes_from_Afar.mp3"></audio>
+    <audio id="song6" src="/music\Sukoon Mila_Arijit Singh_Mary Kom.xoht"></audio>   
+    <audio id="song7" src="/music\save8.mp3"></audio>     
+    <audio id="song8" src="/music\save7.mp3"></audio>     
+    <audio id="song9" src="/music\save6.mp3"></audio>     
+    <audio id="song10" src="music\save5.mp3"></audio>     
+    <audio id="song11" src="/music\save4.mp3"></audio>     
+    <audio id="song12" src="/music/save3.mp3"></audio>     
+    <audio id="song13" src="/music\musci2.mp3"></audio>     
+    <audio id="song14" src= "/music\musisc.mp3"></audio>
+    <audio id="song15" src= " /music\WhatsApp Audio 2025-04-30 at 10.44.09_1c1a6e8c.mp3"></audio>
+
+    <!-- New Music Player Bar -->
+    <div class="music-player-bar">
+        <div class="now-playing">
+            <img id="currentCover" src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30" alt="Album Cover">
+            <div class="song-info">
+                <h4 id="currentTitle">Select a song</h4>
+                <p id="currentArtist">Artist</p>
+            </div>
+        </div>
+        
+        <div class="player-controls">
+            <div class="control-buttons">
+                <button class="control-button shuffle">
+                    <span class="fa fa-random"></span>
+                </button>
+                <button class="control-button previous">
+                    <span class="fa fa-step-backward"></span>
+                </button>
+                <button class="control-button play-pause">
+                    <span class="fa fa-play" id="playPauseIcon"></span>
+                </button>
+                <button class="control-button next">
+                    <span class="fa fa-step-forward"></span>
+                </button>
+                <button class="control-button repeat">
+                    <span class="fa fa-repeat"></span>
+                </button>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-time" id="currentTime">0:00</div>
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="progress-time" id="totalTime">0:00</div>
+                
+            </div>
+        </div>
+        
+        <div class="player-options">
+            <div class="volume-container">
+                <button class="volume-button">
+                    <span class="fa fa-volume-up" id="volumeIcon"></span>
+                </button>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://kit.fontawesome.com/23cecef777.js" crossorigin="anonymous"></script>
+    <script>
+        // Song data - match these with the actual audio files
+        const songData = {
+            song1: {
+                title: "Blinding Lights",
+                artist: "The Weeknd",
+                cover: "https://upload.wikimedia.org/wikipedia/en/e/e6/The_Weeknd_-_Blinding_Lights.png"
+            },
+            song2: {
+                title: "Levitating",
+                artist: "Dua Lipa",
+                cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS66anQAPLTqT5msqmA3bUgP8nU6L34JTvL1A&s"
+            },
+            song3: {
+                title: "Stay",
+                artist: "The Kid LAROI, Justin Bieber",
+                cover: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+            },
+            song4: {
+                title: "Bad Habits",
+                artist: "Ed Sheeran",
+                cover: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+            },
+            song5: {
+                title: "Good 4 U",
+                artist: "Olivia Rodrigo",
+                cover: "/photos s/Screenshot 2025-03-30 121919.png"
+            },
+            song6: {
+                title: "sukoon mila",
+                artist: "Arijit Singh",
+                cover: "https://c.saavncdn.com/143/Sukoon-Mila-Lo-Fi-Mix-Hindi-2023-20230606230325-500x500.jpg"
+            },
+            song7: {
+                title: "patakha guddi",
+                artist: "Arijit Singh",
+                cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT583ahTSIDons2ZfP1cxtHw9WN4C-0V-P6gw&s"
+            },
+            song8: {
+                title: "o boy charlie",
+                artist: "Arijit Singh",
+                cover: "https://img.youtube.com/vi/jXlNjZnnCgc/mqdefault.jpg"
+            },
+            song9: {
+                title: "Titli",
+                artist: "Vishal-Shekhar",
+                cover: "https://c.saavncdn.com/525/Chennai-Express-2013-500x500.jpg"
+            },
+            song10: {
+                title: "sukoon mila",
+                artist: "Arijit Singh",
+                cover: "https://c.saavncdn.com/143/Sukoon-Mila-Lo-Fi-Mix-Hindi-2023-20230606230325-500x500.jpg"
+            },
+            song11: {
+                title: "o rangrez",
+                artist: "Arijit Singh",
+                cover: "https://i.scdn.co/image/ab67616d0000b273fd2df008046f04c32d9c0c2e"
+            },
+            song12: {
+                title: "ve haniya",
+                artist: "Arijit Singh",
+                cover: "https://c.saavncdn.com/367/Ve-Haaniyaan-Punjabi-2024-20240212220137-500x500.jpg"
+            },
+            song13: {
+                title: "slow motion angreja",
+                artist: "Shankar-Eshan-Loy",
+                cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLd9AW_MGHpVf0TbpiSh3bvu7Rq_c7T4Aopw&s"
+            },
+          
+            song14: {
+                title: "Maahi Ve",
+                artist: "A.R Rahman",
+                cover: "https://i.scdn.co/image/ab67616d0000b2731f4e9ecaf6913e207810093f"
+            
+          },
+          
+          song15: {
+              title: "Softly",
+              artist: "Karan Aujla",
+              cover: "https://i1.sndcdn.com/artworks-swMUa9PnVOMP-0-t500x500.jpg"
+          }
+              };
+
+        // DOM Elements
+        const playlistItems = document.querySelectorAll('.item');
+        const playPauseBtn = document.querySelector('.play-pause');
+        const playPauseIcon = document.getElementById('playPauseIcon');
+        const nextBtn = document.querySelector('.next');
+        const prevBtn = document.querySelector('.previous');
+        const progressBar = document.getElementById('progressBar');
+        const progress = document.getElementById('progress');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const totalTimeDisplay = document.getElementById('totalTime');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeIcon = document.getElementById('volumeIcon');
+        const currentTitle = document.getElementById('currentTitle');
+        const currentArtist = document.getElementById('currentArtist');
+        const currentCover = document.getElementById('currentCover');
+
+        // Audio setup
+        let currentAudio = null;
+        let currentSongId = null;
+        let isPlaying = false;
+
+        // Initialize volume
+        volumeSlider.addEventListener('input', () => {
+            const volume = volumeSlider.value / 100;
+            if (currentAudio) {
+                currentAudio.volume = volume;
+            }
+            
+            // Update volume icon based on level
+            if (volume === 0) {
+                volumeIcon.className = 'fa fa-volume-off';
+            } else if (volume < 0.5) {
+                volumeIcon.className = 'fa fa-volume-down';
+            } else {
+                volumeIcon.className = 'fa fa-volume-up';
+            }
+        });
+
+        // Format time in MM:SS
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+        
+
+
+        // Load and play a song
+        function loadSong(songId) {
+            // If there's a current audio playing, pause it
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            
+            // Get the new audio element
+            currentAudio = document.getElementById(songId);
+            currentSongId = songId;
+            
+            // Set volume
+            currentAudio.volume = volumeSlider.value / 100;
+            
+            // Update song info
+            currentTitle.textContent = songData[songId].title;
+            currentArtist.textContent = songData[songId].artist;
+            currentCover.src = songData[songId].cover;
+            
+            // Play the song
+            playSong();
+            
+            // Set up time update for progress bar
+            currentAudio.addEventListener('timeupdate', updateProgress);
+            
+            // Update total duration once metadata is loaded
+            currentAudio.addEventListener('loadedmetadata', () => {
+                totalTimeDisplay.textContent = formatTime(currentAudio.duration);
+                
+
+            });
+            
+            // When song ends
+            currentAudio.addEventListener('ended', () => {
+                // Find next song
+                const currentIndex = parseInt(currentSongId.replace('song', ''));
+                const nextIndex = currentIndex % 5 + 1;
+                loadSong(`song${nextIndex}`);
+            });
+        }
+
+        // Play the current song
+        function playSong() {
+            if (currentAudio) {
+                currentAudio.play();
+                isPlaying = true;
+                playPauseIcon.className = 'fa fa-pause';
+            }
+        }
+
+        // Pause the current song
+        function pauseSong() {
+            if (currentAudio) {
+                currentAudio.pause();
+                isPlaying = false;
+                playPauseIcon.className = 'fa fa-play';
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const currentTime = currentAudio.currentTime;
+            const duration = currentAudio.duration || 1;
+            const progressPercent = (currentTime / duration) * 100;
+            
+            progress.style.width = `${progressPercent}%`;
+            currentTimeDisplay.textContent = formatTime(currentTime);
+        }
+
+        // Event listeners for playlist items
+        playlistItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const songId = item.getAttribute('data-song');
+                loadSong(songId);
+            });
+        });
+
+        // Play/Pause button
+        playPauseBtn.addEventListener('click', () => {
+            if (!currentAudio) {
+                // If no song is selected, play the first one
+                loadSong('song1');
+                return;
+            }
+            
+            if (isPlaying) {
+                pauseSong();
+            } else {
+                playSong();
+            }
+        });
+
+        // Next button
+        nextBtn.addEventListener('click', () => {
+            if (!currentSongId) return;
+            
+            const currentIndex = parseInt(currentSongId.replace('song', ''));
+            const nextIndex = currentIndex % 15 + 1;
+            loadSong(`song${nextIndex}`);
+        });
+
+        // Previous button
+        prevBtn.addEventListener('click', () => {
+            if (!currentSongId) return;
+            
+            let prevIndex = parseInt(currentSongId.replace('song', '')) - 1;
+            if (prevIndex < 1) prevIndex = 15;
+            loadSong(`song${prevIndex}`);
+        });
+
+        // Click on progress bar to seek
+        progressBar.addEventListener('click', (e) => {
+            if (!currentAudio) return;
+            
+            const width = progressBar.clientWidth;
+            const clickX = e.offsetX;
+            const duration = currentAudio.duration;
+            
+            currentAudio.currentTime = (clickX / width) * duration;
+        });
+    </script>
+      <script>
+        const toggleButton = document.getElementById('modeToggle');
+        toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+        
+    </script>
+
+</body>
+</html>
+
+
+
+

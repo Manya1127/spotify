@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spotify</title>
+  <link rel="stylesheet" href="mood.css" />
+  <link rel="icon" href="https://logos-world.net/wp-content/uploads/2020/09/Spotify-Emblem.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" >
+</head>
+<body class="body">
+
+  <div class="sidebar">
+    <div class="logo">
+      <a href="#">
+        <img src="/photos s/logoo project.png" alt="Logo" />
+      </a>
+    </div>
+
+    <div class="navigation">
+      <ul><li>
+       
+        <a href="main.html"><span class="fa fa-house"></span><span>Home</span></a></li>
+    
+        <li><a href="#"><span class="fa fa-search"></span><span>Search</span></a></li>
+        <li><a href="#"><span class="fa fas fa-book"></span><span>Your Library</span></a></li>
+      </ul>
+    </div>
+
+    <div class="navigation">
+      <ul>
+        <li><a href="#"><span class="fa fas fa-plus-square"></span><span>Create Playlist</span></a></li>
+        <li><a href="#"><span class="fa fas fa-heart"></span><span>Liked Songs</span></a></li>
+      </ul>
+    </div>
+
+    <div class="policies">
+      <ul>
+        <li><a href="#">Cookies</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="topbar">
+      <div class="navbar">
+        <ul>
+          
+    
+        <li><a href="#">Premium</a></li>
+       <li><a href="#">Support</a></li>
+          <li><a href="#">Download</a></li>
+          <li class="divider">|</li>
+       
+        </ul>
+       
+      </div>
+    </div>
+    
+
+    <div id="videoContainer">
+      <video autoplay loop muted playsinline id="yourVideoId">
+        <source src="/photos s/mood board2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <h2 style="margin-top: 20px;">Pick Your Mood</h2>
+
+    <div id="moodOptions">
+      <div class="mood">
+        <li>
+    <img src="/photos s/Screenshot 2025-04-28 212921.png" alt="Happy Mood">
+         
+         <a href="playlist.html"><span>Happy</span></a>
+        </li>
+          
+  
+     
+      </div>
+      
+      <div class="mood">
+        <li>
+        <img src="/photos s/Screenshot 2025-03-30 121919.png" alt="Sad Mood">
+        <a href="sad.html"><span>Sad</span></a>
+      </li>
+      </div>
+      <div class="mood">
+      <li>
+          <img src="/photos s/Screenshot 2025-03-30 121931.png" alt="Chill Mood">
+          <a href="playlist.html"><span>Chill</span></a>
+      </li>
+      </div>
+      <div class="mood">
+       <li>
+          <img src="/photos s\love list.jpg" alt="Love Mood">
+          <a href="playlist.html"><span>Love</span></a>
+      </li>
+      </div>
+      <div class="mood">
+        <li>
+          <img src="/photos s\punjabi.jpg" alt="Punjabi Mood">
+          <a href="punjabi.html"><span>Punjabi</span></a>
+    
+        </li>
+         
+      </div>
+      <div class="mood">
+        <a href="/music/WhatsApp Audio 2025-04-30 at 10.44.09_1c1a6e8c.mp3">
+          <img src="/photos s\retro.jpg" alt="Retro Mood">
+          <p>Retro</p>
+        </a>
+      </div>
+      <div class="mood">
+        <a href="/music/WhatsApp Audio 2025-04-30 at 10.44.09_1c1a6e8c.mp3">
+          <img src="/photos s\bollywood.jpg" alt="Bollywood Mood">
+          <p>Bollywood</p>
+        </a>
+      </div>
+      <div class="mood">
+        <a href="/music/WhatsApp Audio 2025-04-30 at 10.44.09_1c1a6e8c.mp3">
+          <img src="/photos s/Screenshot 2025-03-30 121931.png" alt="Slow Mood">
+          <p>Slow</p>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const video = document.getElementById('yourVideoId');
+    const moodOptions = document.getElementById('moodOptions');
+
+    video.onended = () => {
+      video.style.display = 'none';
+      moodOptions.style.display = 'block';
+    };
+  </script>
+  
+
+</body>
+</html>

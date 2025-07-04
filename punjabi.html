@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spotify Clone</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+    padding: 0;
+      font-family: 'Arial', sans-serif;
+      height: 100%;
+      background-color: #121212;
+      display: flex;
+      flex-direction: column;
+      color: white;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+   
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 196px;
+    background-color: #000000;
+    padding: 24px;
+    
+}
+
+.sidebar .logo img {
+    width: 130px;
+}
+
+.sidebar .navigation ul {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.sidebar .navigation ul li {
+    padding: 10px 0px;
+}
+
+.sidebar .navigation ul li a {
+    color: #b3b3b3;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+
+.sidebar .navigation ul li a:hover,
+.sidebar .navigation ul li a:active,
+.sidebar .navigation ul li a:focus {
+    color: #ffffff;
+}
+
+.sidebar .navigation ul li a:hover .fa,
+.sidebar .navigation ul li a:active .fa,
+.sidebar .navigation ul li a:focus .fa {
+    color: #b3b3b3;
+}
+
+.sidebar .navigation ul li .fa {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.sidebar .navigation ul li a:hover .fa:hover,
+.sidebar .navigation ul li a:hover .fa:active,
+.sidebar .navigation ul li a:hover .fa:focus {
+    color: #ffffff;
+}
+
+.sidebar .policies {
+    position: absolute;
+    bottom: 100px;
+}
+
+.sidebar .policies ul {
+    list-style: none;
+}
+
+.sidebar .policies ul li {
+    padding-bottom: 5px;
+}
+
+.sidebar .policies ul li a {
+    color: #b3b3b3;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 10px;
+}
+
+.sidebar .policies ul li a:hover,
+.sidebar .policies ul li a:active,
+.sidebar .policies ul li a:focus {
+    text-decoration: underline;
+}
+
+.main-container {
+    margin-left: 196px;
+    margin-bottom: 100px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: flex-end;
+    background-color: #101010;
+    padding: 14px 30px;
+  }
+  
+  .topbar .navbar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .topbar .navbar ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+  
+  .topbar .navbar ul li {
+    margin: 0 10px;
+  }
+  
+  .topbar .navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .topbar .navbar ul li a:hover {
+    color: #1db954; /* Spotify green or your preferred color */
+  }
+  
+  .topbar .navbar .divider {
+    color: white;
+    font-size: 18px;
+    margin: 0 10px;
+  }
+  
+  .login-btn {
+    background-color: white;
+    color: black;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .login-btn:hover {
+    background-color: #e2e2e2;
+  }
+  
+
+.topbar .navbar ul li.divider {
+    color: #ffffff;
+    font-size: 26px;
+    margin: 0px 20px;
+    width: auto;
+}
+.topbar .navbar button {
+    color: #b3b3b3;
+    background-color:#252525 ;
+    text-decoration:wavy;
+    font-weight: bold;
+    font-size: 17px;
+    letter-spacing: 1px;
+}
+
+.topbar .navbar button:hover,
+.topbar .navbar button:active,
+.topbar .navbar button:focus {
+    background-color: #f2f2f2;
+}
+
+
+    .main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: url('https://i.pinimg.com/736x/27/b0/c0/27b0c0bbf94fe418c29f7ffc11e78cd8.jpg') no-repeat center center/cover;
+    }
+
+    ul#playlist {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      width: 300px;
+    }
+
+    ul#playlist li {
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    ul#playlist li:hover,
+    ul#playlist li.active {
+      background: #73dbf8;
+      color: #000;
+    }
+
+    .music-player-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 90px;
+      background-color: #181818;
+      border-top: 1px solid #282828;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 100;
+    }
+      /* Adjust the preview banner to make room for player */
+      .preview {
+            bottom: 90px;
+        }
+
+        /* Hide the existing song-list since we'll use the music player instead */
+        .song-list {
+            display: none;
+        }
+
+        /* Add cursor pointer to the playlist items */
+        .spotify-playlists .list .item {
+            cursor: pointer;
+        }
+
+    .now-playing {
+      display: flex;
+      align-items: center;
+      width: 30%;
+    }
+
+    .now-playing img {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      margin-right: 14px;
+    }
+
+    .song-info h4, .song-info p {
+      margin: 0;
+      color: white;
+    }
+
+    .player-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 40%;
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 8px;
+    }
+
+    .control-button {
+      background: none;
+      border: none;
+      color: #b3b3b3;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .control-button.play-pause {
+      background: #fff;
+      color: #000;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 4px;
+      background: #535353;
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .progress {
+      height: 100%;
+      background: #1db954;
+      width: 0%;
+    }
+
+    .progress-time {
+      color: #b3b3b3;
+      font-size: 12px;
+    }
+
+    .player-options {
+      width: 30%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .volume-slider {
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+
+   
+  <div class="sidebar">
+    <div class="logo">
+      <a href="#">
+        <img src="/photos s\logoo project.png" alt="Logo" />
+      </a>
+    </div>
+
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="fa fa-house"></i></span>
+            <span>Home</span>
+            </a>
+        </li> 
+
+        <li>
+          <a href="#">
+            <span class="fa fa-search"></span>
+            <span>Search</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="#">
+            <span class="fa fas fa-book"></span>
+            <span>Your Library</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="fa fas fa-plus-square"></span>
+            <span>Create Playlist</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="#">
+            <span class="fa fas fa-heart"></span>
+            <span>Liked Songs</span>
+          </a>
+        </li>
+     
+
+      <li>
+        <a href="moodboard.html">
+          <span class="fa fas fa-headphones"></span>
+          <span>Moodboard</span>
+          </a>
+      </li>
+    </ul>
+
+    </div>
+
+    <div class="policies">
+      <ul>
+        <li>
+          <a href="#">Cookies</a>
+        </li>
+        <li>
+          <a href="#">Privacy</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topbar">
+      <div class="navbar">
+        <ul>
+       
+          <li>
+            <a href="#">Premium</a>
+          </li>
+         <li>
+            <a href="#">Support</a>
+          </li>
+          <li>
+            <a href="#">Download</a>
+          </li>
+          <li class="divider">|</li>
+          <li>
+            <i class="fa-solid fa-heart"></i>
+          </li>
+         
+        
+        </ul>
+      
+     
+      </div>
+    </div>
+
+    <div class="main">
+      <h2> Punjabi</h2>
+      <ul id="playlist">
+        <li data-src="/music/WhatsApp Audio 2025-04-30 at 10.44.09_1c1a6e8c.mp3">Softly</li>
+        <li data-src="/music/jhak mar ke.mp3">Jhak Mar Ke</li>
+        <li data-src="/music/tumhi ho bandhu .mp3">Tumhi Ho Bandhu</li>
+        <li data-src="/music/abhi kuch dino se.mp3">Abhi Kuch Dino Se</li>
+        <li data-src="/music/Nashe Si Chadh Gayi - Befikre 128 Kbps.mp3">Nashe Si Chadh Gayi</li>
+        <li data-src="/music/musisc.mp3">Music 1</li>
+        <li data-src="/music/musci2.mp3">Music 2</li>
+        <li data-src="/music/save7.mp3">Save 7</li>
+        <li data-src="/music/save4.mp3">Save 4</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="music-player-bar">
+    <div class="now-playing">
+      <img id="currentCover" src="https://i.pinimg.com/736x/c2/e2/79/c2e27977772e0a3fedc0bc8eeb760ae6.jpg" alt="Album Cover">
+      <div class="song-info">
+        <h4 id="currentTitle">Select a song</h4>
+        <p id="currentArtist">Artist</p>
+      </div>
+    </div>
+
+    <div class="player-controls">
+      <div class="control-buttons">
+          <button class="control-button shuffle">
+              <span class="fa fa-random"></span>
+          </button>
+          <button class="control-button previous">
+              <span class="fa fa-step-backward"></span>
+          </button>
+          <button class="control-button play-pause">
+              <span class="fa fa-play" id="playPauseIcon"></span>
+          </button>
+          <button class="control-button next">
+              <span class="fa fa-step-forward"></span>
+          </button>
+          <button class="control-button repeat">
+              <span class="fa fa-repeat"></span>
+          </button>
+      </div>
+      
+      <div class="progress-container">
+          <div class="progress-time" id="currentTime">0:00</div>
+          <div class="progress-bar" id="progressBar">
+              <div class="progress" id="progress"></div>
+          </div>
+          <div class="progress-time" id="totalTime">0:00</div>
+          
+      </div>
+  </div>
+  
+  <div class="player-options">
+    <div class="volume-container">
+        <button class="volume-button">
+            <span class="fa fa-volume-up" id="volumeIcon"></span>
+        </button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+    </div>
+</div>
+</div>
+
+  <audio id="audioPlayer"></audio>
+  <script src="https://kit.fontawesome.com/23cecef777.js" crossorigin="anonymous"></script>
+  <script>
+    const audio = document.getElementById('audioPlayer');
+    const playlist = document.querySelectorAll('#playlist li');
+    const playPauseBtn = document.querySelector('.play-pause');
+    const playPauseIcon = document.getElementById('playPauseIcon');
+    const prevBtn = document.querySelector('.previous');
+    const nextBtn = document.querySelector('.next');
+    const progress = document.getElementById('progress');
+    const progressBar = document.getElementById('progressBar');
+    const currentTimeDisplay = document.getElementById('currentTime');
+    const totalTimeDisplay = document.getElementById('totalTime');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const currentTitle = document.getElementById('currentTitle');
+
+    let currentTrack = 0;
+
+    function loadSong(index) {
+      const song = playlist[index];
+      audio.src = song.getAttribute('data-src');
+      currentTitle.textContent = song.textContent;
+      playlist.forEach(item => item.classList.remove('active'));
+      song.classList.add('active');
+      audio.play();
+      playPauseIcon.className = 'fa fa-pause';
+    }
+
+    playPauseBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playPauseIcon.className = 'fa fa-pause';
+      } else {
+        audio.pause();
+        playPauseIcon.className = 'fa fa-play';
+      }
+    });
+
+    playlist.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        currentTrack = index;
+        loadSong(currentTrack);
+      });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentTrack = (currentTrack + 1) % playlist.length;
+      loadSong(currentTrack);
+    });
+
+    prevBtn.addEventListener('click', () => {
+      currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+      loadSong(currentTrack);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const progressPercent = (audio.currentTime / audio.duration) * 100;
+      progress.style.width = `${progressPercent}%`;
+      currentTimeDisplay.textContent = formatTime(audio.currentTime);
+      totalTimeDisplay.textContent = formatTime(audio.duration);
+    });
+
+    volumeSlider.addEventListener('input', () => {
+      audio.volume = volumeSlider.value / 100;
+    });
+
+    function formatTime(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    progressBar.addEventListener('click', (e) => {
+      const width = progressBar.clientWidth;
+      const clickX = e.offsetX;
+      const duration = audio.duration;
+      audio.currentTime = (clickX / width) * duration;
+    });
+  </script>
+</body>
+</html>
